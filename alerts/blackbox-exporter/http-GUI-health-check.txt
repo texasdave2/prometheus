@@ -1,0 +1,10 @@
+
+      - alert: user interface not reachable
+        labels:
+          severity: critical
+          pager: sysadmin
+          service: url
+        annotations:
+          description: "user interface target {{ $labels.instance }} is unreachable via TCP connect"
+        expr: probe_success{job="blackbox-http-ssl-probe",source="YOUR-APPLICATION-gui"} == 0
+        for: 5m
