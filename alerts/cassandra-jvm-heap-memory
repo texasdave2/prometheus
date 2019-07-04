@@ -1,0 +1,10 @@
+
+      - alert: Cassandra JVM heap memory usage greater than 80% warning
+        labels:
+          severity: critical
+          pager: dba
+          service: db
+        annotations:
+          description: "Cassandra DB node {{ $labels.instance }} JVM heap memory usage greater than 90% warning"
+        expr: ((jvm_memory_bytes_used{area="heap", job=~".+cassandra-db.+"} / jvm_memory_bytes_max{area="heap", job=~".+cassandra-db.+"}) * 100) > 90
+        for: 5m
