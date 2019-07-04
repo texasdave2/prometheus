@@ -1,0 +1,10 @@
+
+      - alert: Cassandra high read latency for keyspace greater than 1 second
+        labels:
+          severity: critical
+          pager: dba
+          service: db
+        annotations:
+          description: "Cassandra DB node {{ $labels.instance }} high read latency for keyspace"
+        expr: cassandra_keyspace_readlatency_seconds{keyspace="YOUR-KEYSPACE-NAME", job=~".+cassandra-db.+", quantile="0.999"} > 1
+        for: 5m
