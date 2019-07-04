@@ -1,0 +1,12 @@
+## this alert can be quite noisy if you are copying large files onto this node all at once
+## use with care understanding that the on-call person could get paged while you're simply copying some files
+
+      - alert: Predictive disk will fill in 4 hours
+        labels:
+          severity: critical
+          pager: sysadmin
+          service: node
+        annotations:
+          description: "NODE {{ $labels.instance }} disk will fill in 4 hours"
+        expr: predict_linear(node_filesystem_avail_bytes{device="rootfs"}[1h], 4 * 3600) < 0
+        for: 5m
