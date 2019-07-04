@@ -1,0 +1,10 @@
+
+      - alert: WARNING low available disk space under 20 percent
+        labels:
+          severity: warning
+          pager: sysadmin
+          service: node
+        annotations:
+          description: "NODE {{ $labels.instance }} warning low available disk space"
+        expr: ((node_filesystem_avail_bytes{device="rootfs"} / node_filesystem_size_bytes{device="rootfs"}) * 100) < 20
+        for: 5m
