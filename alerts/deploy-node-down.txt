@@ -1,0 +1,9 @@
+      - alert: Deployment node is possibly down metric scrape failed
+        labels:
+          severity: critical
+          pager: sysadmin
+          service: node
+        annotations:
+          description: "Deployment node {{ $labels.instance }} is unreachable via TCP metric scrape, possibly down"
+        expr: up{job=~".+deploy.+"} == 0
+        for: 5m
