@@ -1,0 +1,10 @@
+
+      - alert: Cassandra node high disk writes per second over 7 Mbps for 10 minutes
+        labels:
+          severity: warning
+          pager: dba
+          service: db
+        annotations:
+          description: "Cassandra DB node {{ $labels.instance }} high disk writes for 10 minutes, this occurs when the commitlogs are being moved and then deleted as per the commitlog purge process, this is normal behavior but could be worth looking into in Grafana fromin the Cassandra node level metrics disk detail disk RW data panel"
+        expr: irate(node_disk_written_bytes_total{job=~".+cassandra-db.+"}[10m]) > 7000000
+        for: 10m
