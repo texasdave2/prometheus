@@ -1,0 +1,16 @@
+##
+## TEST Rules for testing an alert
+##
+    - name: test.rules
+      rules:
+#
+#      - alert: TEST ALERT FROM PROMETHEUS PLEASE ACKNOWLEDGE
+#        labels:
+#          severity: warning
+#          pager: sysadmin
+#          service: node
+#        annotations:
+#          description: "TEST ALERT FROM {{ $labels.instance }}"
+#          action: "TESTING PLEASE ACKNOWLEDGE, NO FURTHER ACTION REQUIRED ONLY A TEST"
+#        expr: prometheus_build_info{instance="localhost:9090"} == 1
+#        for: 10s
