@@ -1,0 +1,10 @@
+
+      - alert: RAM low memory available less than 20 percent
+        labels:
+          severity: critical
+          pager: sysadmin
+          service: node
+        annotations:
+          description: "NODE {{ $labels.instance }} low available RAM memory"
+        expr: ((node_memory_MemAvailable_bytes / node_memory_MemTotal_bytes) * 100) < 20
+        for: 5m
