@@ -1,0 +1,12 @@
+
+### memcache in this example
+
+      - alert: LWM2M IMPACT memcache container is down - memcache
+        labels:
+          severity: critical
+          pager: sysadmin
+          service: impact
+        annotations:
+          description: "LWM2M memcache container is down, absent for over 1 minute"
+        expr: kube_pod_container_status_running{container="memcache",pod=~"^memcache.+"} < 1 or absent(sum(kube_pod_container_status_running{container="memcache",pod=~"^memcache.+"}))
+        for: 5m
