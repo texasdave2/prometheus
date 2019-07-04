@@ -1,0 +1,10 @@
+
+      - alert: Container worker node network IO receive is zero, check container statuses in cluster
+        labels:
+          severity: critical        
+          pager: sysadmin
+          service: container
+        annotations:
+          description: "Container Worker node container network IO receive bytes is zero, check container statuses in cluster"
+        expr: rate(container_network_receive_bytes_total{is_worker="true"}[2m]) < 1
+        for: 5m
