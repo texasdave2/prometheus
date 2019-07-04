@@ -1,0 +1,10 @@
+
+      - alert: LContainer Disk usage is critically high over 80 percent
+        labels:
+          severity: critical
+          pager: sysadmin
+          service: container
+        annotations:
+          description: "Device {{ $labels.device }} of pod {{ $labels.pod_name }}, container {{ $labels.container_name }}  usage is above 80%"
+        expr: 100*container_fs_usage_bytes{container_name!='POD',container_name=~'.+'}/container_fs_limit_bytes{container_name!='POD',container_name=~'.+'} > 80
+        for: 5m
