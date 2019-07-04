@@ -1,0 +1,10 @@
+
+      - alert: worker node down metric scrape failed
+        labels:
+          severity: critical
+          pager: sysadmin
+          service: node
+        annotations:
+          description: "Worker node {{ $labels.instance }} is down. Only {{ $value }} node(s) are running"
+        expr: sum(up{job="kubernetes-nodes", is_worker="true"}) < 2
+        for: 5m
