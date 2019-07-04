@@ -1,0 +1,10 @@
+
+      - alert: APPLICATION deployment pods and containers are down
+        labels:
+          severity: critical
+          pager: sysadmin
+          service: cdp
+        annotations:
+          description: "All CDP deployment pods and containers are down for at least 1 minute"
+        expr: (kube_deployment_status_replicas_available{deployment="YOUR-DEPLOYMENT-NAME"} == 0) or absent(kube_deployment_status_replicas_available{deployment="YOUR-DEPLOYMENT-NAME"})
+        for: 5m
