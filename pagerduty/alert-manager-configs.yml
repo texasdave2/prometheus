@@ -1,0 +1,63 @@
+######################################################
+######################################################
+##
+##        ALERT MANAGER PAGER DUTY CONFIGS
+##
+######################################################
+######################################################
+
+#     global:
+#
+#     receivers:
+#     ## this service key maps pager duty high severity pager and email
+#       - name: pager-duty-critical
+#         pagerduty_configs:
+#           - routing_key: INSERT-YOUR-CRITICAL-KEY
+#             severity: '{{ .CommonLabels.severity }}'
+#             class: '{{ .CommonLabels.class }}'
+#             component: '{{ .CommonLabels.component }}'
+#
+#
+#     ## this service key maps to pager duty low severity email only
+#       - name: pager-duty-warning
+#         pagerduty_configs:
+#           - routing_key: INSERT-YOUR-WARNING-KEY
+#             severity: '{{ .CommonLabels.severity }}'
+#             class: '{{ .CommonLabels.class }}'
+#             component: '{{ .CommonLabels.component }}'
+#
+#     route:
+#       # The labels by which incoming alerts are grouped together. For example,
+#       # multiple alerts coming in for cluster=A and alertname=LatencyHigh would
+#       # be batched into a single group.
+#       group_by: ['alert', 'env', 'severity']
+#
+#       # When a new group of alerts is created by an incoming alert, wait at
+#       # least 'group_wait' to send the initial notification.
+#       # This way ensures that you get multiple alerts for the same group that start
+#       # firing shortly after another are batched together on the first
+#       # notification.
+#       group_wait: 30s
+#
+#       # When the first notification was sent, wait 'group_interval' to send a batch
+#       # of new alerts that started firing for that group.
+#       group_interval: 5m
+#
+#       # If an alert has successfully been sent, wait 'repeat_interval' to
+#       # resend them.
+#       repeat_interval: 5m
+#
+#     ## IMPORTANT - you must have a fall back receiver set here where alerts will go
+#     ## if none of the routes are available
+#       receiver: pager-duty-critical
+#
+#     ## routes below match a label in the prometheus alert rules file
+#
+#       routes:
+#       - match:
+#           severity: warning
+#         receiver: pager-duty-warning
+#       - match:
+#           severity: critical
+#         receiver: pager-duty-critical
+
