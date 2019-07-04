@@ -1,0 +1,10 @@
+
+      - alert: Openstack API port not connecting
+        labels:
+          severity: critical
+          pager: sysadmin
+          service: port
+        annotations:
+          description: "Openstack API target {{ $labels.instance }} is unreachable via TCP connect"
+        expr: probe_success{job="blackbox-tcp-connect-probe",source="openstack-api"} == 0
+        for: 5m
