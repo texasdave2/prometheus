@@ -1,0 +1,11 @@
+
+      - alert: Cassandra G1 Young Generation garbage collection taking longer than 1 second
+        labels:
+          severity: critical
+          pager: dba
+          service: db
+        annotations:
+          description: "Cassandra DB node {{ $labels.instance }} G1 Young Generation garbage collection taking longer than 1 second"
+        expr: rate(jvm_gc_collection_seconds_sum{job=~".+cassandra-db.+",gc="G1 Young Generation"}[5m]) > 1
+        for: 5m
+
