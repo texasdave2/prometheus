@@ -1,0 +1,10 @@
+
+      - alert: Container CPU usage critically high - greater than 90 percent
+        labels:
+          severity: critical
+          pager: sysadmin
+          service: container
+        annotations:
+          description: "Pod {{ $labels.pod_name }}, container {{ $labels.container_name }}  CPU usage above 90%"
+        expr: irate(container_cpu_usage_seconds_total{container_name=~'.+'}[5m])*100 > 90
+        for: 5m
