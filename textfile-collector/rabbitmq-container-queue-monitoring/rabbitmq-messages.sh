@@ -17,7 +17,7 @@ do
 
 ## get the queue name
 
-  queue_name=$(awk '{print $1}' <<< "$i")
+  queue_name=$(awk '{print $1}' <<< "$i" | sed 's/\./_/g' | sed 's/\-/_/g')
 
 ## get the 'message ready' metrics for each message queue name
 
