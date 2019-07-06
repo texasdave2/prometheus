@@ -3,12 +3,12 @@
 ## and format them into prometheus-friendly metrics to be used by
 ## node exporter textfile collector
 
-license_name_array=( $(sudo kubectl describe cm license-config | \
+license_name_array=( $(sudo kubectl describe cm YOURCONFIGMAP | \
 awk '/licenceInfo/ {print $3;}' | \
 cut -d '"' -f2) )
 
 
-license_expire_date_array=( $(sudo kubectl describe cm license-config | \
+license_expire_date_array=( $(sudo kubectl describe cm YOURCONFIGMAP | \
 awk '/endTime/ {print $2;}' | \
 cut -d '"' -f2) )
 
