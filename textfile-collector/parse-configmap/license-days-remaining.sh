@@ -27,7 +27,7 @@ do
 
 done > /var/lib/node_exporter/license_days.prom
 
-chown cloud-user:cloud-user /var/lib/node_exporter/license_days.prom &&
+chown cloud-user:wheel /var/lib/node_exporter/license_days.prom &&
 chmod 744 /var/lib/node_exporter/license_days.prom
 
 
