@@ -32,38 +32,39 @@ receivers:
 
   - name: default-email-receiver
 #    email_configs:
-#      - to: 'XXX@XXX.COM'
+#      - to: ''
 #        send_resolved: false
-#        from: 'noreply@XXX@XXX.COM'
+#        from: ''
 #        smarthost: '127.0.0.1:25'
 #        require_tls: false
 
-#  - name: warning-email-receiver
-#    email_configs:
-#      - to: 'XXX@XXX.COM'
-#        send_resolved: false
-#        from: 'warning-test@XXX@XXX.COM'
-#        smarthost: '127.0.0.1:25'
-#        require_tls: false
-
-#  - name: critical-email-receiver
-#    email_configs:
-#      - to: 'XXX@XXX.COM'
-#        send_resolved: false
-#        from: 'critical-testXXX@XXX.COM'
-#        smarthost: '127.0.0.1:25'
-#        require_tls: false
-
-  - name: special-team-email-receiver
+  - name: hosted-warning-email-receiver
     email_configs:
-      - to: 'XXX@XXX.COM,XXX@XXX.COM,XXX@XXX.COM,XXX@XXX.COM'
+      - to: ''
         send_resolved: false
-        from: 'DISTRIBUTION-LISTXXX@XXX.COM'
+        from: ''
+        smarthost: '127.0.0.1:25'
+        require_tls: false
+
+  - name: hosted-critical-email-receiver
+    email_configs:
+      - to: ''
+        send_resolved: false
+        from: ''
+        smarthost: '127.0.0.1:25'
+        require_tls: false
+
+  - name: team-email-receiver
+    email_configs:
+      - to: ''
+        send_resolved: false
+        from: ''
         smarthost: '127.0.0.1:25'
         require_tls: false
 
 
 ## ROUTING BASED ON MATCHING LABELS INSIDE OF THE ALERTS
+
 ## ROUTE IS THE PARENT, WHILE 'ROUTES' WITH AN 'S' ARE CHILDREN THAT CAN BE CUSTOMIZED
 ## WITH DIFFERENT MATCHERS FOR VARIOUS LABELS
 ## YOU MUST HAVE A DEFAULT RECEIVER OF SOME KIND LISTED IN THIS SECTION
@@ -84,11 +85,11 @@ route:
 
 #  - match:
 #      severity: warning
-#    receiver: warning-email-receiver
+#    receiver: hosted-warning-email-receiver
 #
 #  - match:
 #      severity: critical
-#    receiver: critical-email-receiver
+#    receiver: hosted-critical-email-receiver
 
 
 #################################################################
@@ -109,6 +110,39 @@ route:
 #        severity: critical
 #      receiver: critical-email-receiver
 
+##################################################################
+## CERT ROUTING
+## by default all alerts go to catch all hosted team email
+## then, anything critical or warning from CERT is routed to the right place
+## 'continue: true' is used to force alertmanager to go down the chain of matches
+##################################################################
+
+  routes:
+  - match:
+      env: CERT
+    receiver: default-email-receiver
+    routes:
+    - match:
+        severity: critical
+        continue: true
+      receiver: hosted-critical-email-receiver
+
+    - match:
+        severity: critical
+        continue: true
+      receiver: team-email-receiver
+
+#    - match:
+#        severity: critical
+#      receiver: pager-duty-critical
+
+    - match:
+        severity: warning
+        continue: true
+      receiver: hosted-warning-email-receiver
+
+
+
 
 #################################################################
 ## REGEX MATCHING
@@ -122,7 +156,7 @@ route:
 #  routes:
 #  - match_re:
 #      alertname: .*(TEST).*
-#    receiver: critical-email-receiver
+#    receiver: hosted-critical-email-receiver
 
 
 
@@ -130,4 +164,4 @@ route:
 #  routes:
 #  - match_re:
 #      alertname: .*(TEST).*
-#    receiver: special-team-email-receiver
+#    receiver: team-email-receiver
