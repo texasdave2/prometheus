@@ -1,0 +1,133 @@
+global:
+
+
+#### RECEIVERS SECTION, WHERE ALERTS END UP GOING, EMAIL, PAGER DUTY ETC.
+
+receivers:
+####################################################
+# PAGER DUTY RECEIVERS
+####################################################
+
+## this service key maps pager duty high severity pager and pager duty email
+#  - name: pager-duty-critical
+#    pagerduty_configs:
+#    - routing_key: 
+#      severity: '{{ .CommonLabels.severity }}'
+#      class: '{{ .CommonLabels.class }}'
+#      component: '{{ .CommonLabels.component }}'
+
+
+## this service key maps to pager duty low severity and pager duty email only
+#  - name: pager-duty-warning
+#    pagerduty_configs:
+#    - routing_key: 
+#      severity: '{{ .CommonLabels.severity }}'
+#      class: '{{ .CommonLabels.class }}'
+#      component: '{{ .CommonLabels.component }}'
+
+
+####################################################
+# EMAIL RECEIVERS, distribution lists are here
+####################################################
+
+  - name: default-email-receiver
+#    email_configs:
+#      - to: 'XXX@XXX.COM'
+#        send_resolved: false
+#        from: 'noreply@XXX@XXX.COM'
+#        smarthost: '127.0.0.1:25'
+#        require_tls: false
+
+#  - name: warning-email-receiver
+#    email_configs:
+#      - to: 'XXX@XXX.COM'
+#        send_resolved: false
+#        from: 'warning-test@XXX@XXX.COM'
+#        smarthost: '127.0.0.1:25'
+#        require_tls: false
+
+#  - name: critical-email-receiver
+#    email_configs:
+#      - to: 'XXX@XXX.COM'
+#        send_resolved: false
+#        from: 'critical-testXXX@XXX.COM'
+#        smarthost: '127.0.0.1:25'
+#        require_tls: false
+
+  - name: special-team-email-receiver
+    email_configs:
+      - to: 'XXX@XXX.COM,XXX@XXX.COM,XXX@XXX.COM,XXX@XXX.COM'
+        send_resolved: false
+        from: 'DISTRIBUTION-LISTXXX@XXX.COM'
+        smarthost: '127.0.0.1:25'
+        require_tls: false
+
+
+## ROUTING BASED ON MATCHING LABELS INSIDE OF THE ALERTS
+## ROUTE IS THE PARENT, WHILE 'ROUTES' WITH AN 'S' ARE CHILDREN THAT CAN BE CUSTOMIZED
+## WITH DIFFERENT MATCHERS FOR VARIOUS LABELS
+## YOU MUST HAVE A DEFAULT RECEIVER OF SOME KIND LISTED IN THIS SECTION
+
+route:
+  group_wait: 30s
+  group_interval: 30s
+  receiver: default-email-receiver
+  repeat_interval: 10m
+
+## CHILDREN ROUTES FOR SETTING LABEL BASED ROUTING
+
+
+#################################################################
+## SEVERITY ALERTS
+#################################################################
+
+
+#  - match:
+#      severity: warning
+#    receiver: warning-email-receiver
+#
+#  - match:
+#      severity: critical
+#    receiver: critical-email-receiver
+
+
+#################################################################
+## NESTED ALERTS, COMBINING LABELS FOR MORE FINE GRAINED ALERTING
+###############################################################
+
+## set up a general alert for anything that alerts for service label to certain people
+#  routes:
+#  - match:
+#      service: node
+#    receiver: default-email-receiver
+
+## have a subset of the above alert to fire if the alert is node service AND critical severity
+## this will point emails to a different critical receiver
+
+#    routes:
+#    - match:
+#        severity: critical
+#      receiver: critical-email-receiver
+
+
+#################################################################
+## REGEX MATCHING
+#################################################################
+
+## this example shows the label alertname being matched and then
+## routing any alert that has TEST in the name to the receiver listed
+
+
+## alert on an alert name using regex matcher
+#  routes:
+#  - match_re:
+#      alertname: .*(TEST).*
+#    receiver: critical-email-receiver
+
+
+
+## alert on an alert name using regex matcher
+#  routes:
+#  - match_re:
+#      alertname: .*(TEST).*
+#    receiver: special-team-email-receiver
