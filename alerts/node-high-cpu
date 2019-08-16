@@ -1,0 +1,12 @@
+
+      - alert: NODE CPU load very high too many processes over 70 percent
+        labels:
+          severity: critical
+          pager: sysadmin
+          service: node
+        annotations:
+          description: "CPU load is very high on instance {{ $labels.instance }} too many processes could lead to inaccessible host"
+          action: ""
+        expr: 100 - (avg by (instance) (irate(node_cpu_seconds_total{job="kubernetes-service-endpoints",mode="idle"}[5m])) * 100) > 70
+        for: 5m
+
