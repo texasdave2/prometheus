@@ -23,7 +23,7 @@ date_raw=( $(curl -u $username:$password -X GET --header "Accept: application/js
 
 days_remain=$( echo $(( ($(date -d $date_raw +%s) - $(date +%s) )/(60*60*24) )) )
 
-(for i in "${app_items_array[@]}"
+for i in "${app_items_array[@]}"
 do
 
   echo "${i}"
